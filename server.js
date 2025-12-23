@@ -9,7 +9,7 @@ import { errorHandler } from "./middleware/errorMiddleware.js";
 import routes from "./routes/routes.js";
 import path from "path";
 import passport from "passport";
-import createImageUploadRoute from './config/uploadImage/imageupload.js';
+
 
 
 environment.config();
@@ -46,9 +46,6 @@ app.use(limiter);
 const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(',') || [
   'http://localhost:3000', 
   'http://localhost:3001', 
-  'https://my.multisports.com.bd',
-  'http://my.multisports.com.bd',
-  'https://multisports-script-front.vercel.app',
 ];
 app.use(cors({
   origin: (origin, callback) => {
@@ -71,9 +68,7 @@ app.use(express.urlencoded({ extended: true }));
 
 // Static files
 app.use(express.static('public'));
-// app.use(express.static(path.join(__dirname, 'public')));
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
-app.use('/api/products/', createImageUploadRoute('uploads/products'));
+
 app.use("/api", routes);
 
 

@@ -15,8 +15,8 @@ const createUser = async () => {
 
     // Create new user details
     const userData = {
-      email: '1@1.com',
-      password: '123456',
+      email: 'sadatcse@gmail.com',
+      password: '12345678',
       name: 'MD SADAT KHAN',
       role: 'admin',
       branch: 'alamin',
