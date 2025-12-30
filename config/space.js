@@ -127,6 +127,7 @@ export async function updateObject(createKey, file, deleteKey, mimetype) {
 }
 
 export async function getImageUrl(req, res) {
+  console.log("url hit");
   const { pathName } = req.query;
   const image = req?.files?.image;
 

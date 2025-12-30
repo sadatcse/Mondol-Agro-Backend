@@ -8,7 +8,7 @@ import {
   getPaginatedCompanies,
   getCompaniesByCity,
 } from "./Company.controller.js";
-import { authenticateToken } from "../../../middleware/authMiddleware.js";
+
 const CompanyRoutes = Router();
 
 // Get all companies
@@ -19,7 +19,7 @@ CompanyRoutes.get("/:city/get-all", getCompaniesByCity);
 
 // Get company by ID
 CompanyRoutes.get("/get-id/:id", getCompanyById);
-
+  
 // Create a new company
 CompanyRoutes.post("/post", createCompany);
 

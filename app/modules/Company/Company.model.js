@@ -1,53 +1,92 @@
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
-const CompanySchema = Schema(
+const CompanySchema = new Schema(
   {
-    name: {
+    companyName: {
       type: String,
       required: [true, "Please provide the company name"],
+      trim: true,
     },
-    address: {
+
+    parentGroupName: {
       type: String,
+      required: [true, "Please provide the parent group name"],
+      trim: true,
     },
+
+    companyType: {
+      type: String,
+      enum: [
+        "Private Limited",
+        "Public Limited",
+        "Subsidiary",
+        "One Person Company",
+        "Branch Office",
+        "Sister Concern",
+      ],
+      required: [true, "Please provide the company type"],
+    },
+
+    registrationNumber: {
+      type: String,
+      unique: true,
+      trim: true,
+    },
+
+    tradeLicenseNumber: {
+      type: String,
+      trim: true,
+    },
+
+    tinNumber: {
+      type: String,
+      trim: true,
+    },
+
+    binNumber: {
+      type: String,
+      trim: true,
+    },
+
+    registeredAddress: {
+      type: String,
+      trim: true,
+    },
+
     city: {
       type: String,
+      trim: true,
+    },
 
-    },
-    postalCode: {
+    managingDirectorName: {
       type: String,
-  
+      trim: true,
     },
-    country: {
-      type: String,
 
-    },
-    mobile: {
+    contactPhone: {
       type: String,
-    
+      trim: true,
     },
-    email: {
-      type: String,
 
+    companyEmail: {
+      type: String,
+      lowercase: true,
+      trim: true,
     },
+
     website: {
       type: String,
-
+      trim: true,
     },
-    tradeLicense: {
-      type: String,
 
+    businessNature: {
+      type: [String],
     },
-    tinCertificate: {
-      type: String,
 
-    },
     logo: {
       type: String,
-   
-    },
-    otherInfo: {
-      type: String,
+      default: null,
     },
   },
   { timestamps: true }

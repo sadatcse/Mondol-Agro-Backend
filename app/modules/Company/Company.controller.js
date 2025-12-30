@@ -25,11 +25,17 @@ export async function getPaginatedCompanies(req, res) {
   try {
     const page = parseInt(req.query.page) || 1;
     const limit = parseInt(req.query.limit) || 10;
+    const search = req.query.search || "";
     const skip = (page - 1) * limit;
 
+    // Create a search query
+    const query = search 
+      ? { companyName: { $regex: search, $options: "i" } } 
+      : {};
+
     const [result, totalCompanies] = await Promise.all([
-      Company.find().skip(skip).limit(limit).exec(),
-      Company.countDocuments(),
+      Company.find(query).sort({ createdAt: -1 }).skip(skip).limit(limit).exec(),
+      Company.countDocuments(query),
     ]);
 
     const totalPages = Math.ceil(totalCompanies / limit);
@@ -39,7 +45,6 @@ export async function getPaginatedCompanies(req, res) {
       currentPage: page,
       totalPages: totalPages,
       totalItems: totalCompanies,
-      pageSize: limit,
     });
   } catch (err) {
     res.status(500).send({ error: err.message });
