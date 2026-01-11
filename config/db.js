@@ -1,21 +1,42 @@
 import mongoose from "mongoose";
 import colors from "colors";
 
+const RECONNECT_TIME = 5 * 60 * 1000; // 5 minutes
+
 const connectDB = async () => {
   try {
-    // Configure Mongoose to handle `strictQuery` setting explicitly
-    mongoose.set('strictQuery', false); // Use false if you want to allow non-schema fields
+    mongoose.set("strictQuery", false);
 
     const conn = await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,      // Recommended for parsing MongoDB connection string
-      useUnifiedTopology: true,  // Recommended for handling MongoDB's new connection management engine
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
     });
 
-    console.log(`MongoDB Connected: ${conn.connection.host}`.underline.green);
+    console.log(
+      `MongoDB Connected: ${conn.connection.host}`.underline.green
+    );
   } catch (error) {
     console.error(`Error: ${error.message}`.red.bold);
-    process.exit(1); // Exit process with failure
+
+    console.log(
+      `Reconnecting to MongoDB in 5 minutes...`.yellow
+    );
+
+    setTimeout(connectDB, RECONNECT_TIME);
   }
 };
+
+/* Handle runtime disconnection */
+mongoose.connection.on("disconnected", () => {
+  console.log("MongoDB disconnected!".red.bold);
+  console.log("Trying to reconnect in 5 minutes...".yellow);
+
+  setTimeout(connectDB, RECONNECT_TIME);
+});
+
+/* Optional: log errors */
+mongoose.connection.on("error", (err) => {
+  console.error(`MongoDB error: ${err.message}`.red.bold);
+});
 
 export default connectDB;

@@ -6,16 +6,16 @@ import {
   updateProject,
   removeProject,
   getPaginatedProjects,
-  getProjectsByManager,
+  getProjectsByCompany,
 } from "./Project.controller.js";
-import { authenticateToken } from "../../../middleware/authMiddleware.js";
+
 const ProjectRoutes = Router();
 
 // Get all projects
 ProjectRoutes.get("/", getAllProjects);
 
-// Get projects by project manager
-ProjectRoutes.get("/:projectManager/get-all", getProjectsByManager);
+// Get projects by company
+ProjectRoutes.get("/:company/get-all", getProjectsByCompany);
 
 // Get project by ID
 ProjectRoutes.get("/get-id/:id", getProjectById);

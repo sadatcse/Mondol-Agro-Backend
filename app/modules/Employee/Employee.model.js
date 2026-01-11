@@ -3,7 +3,6 @@ const { Schema, model } = mongoose;
 
 const EmployeeSchema = Schema(
   {
-    // --- Basic Info ---
     name: {
       type: String,
       required: [true, "Please provide the employee name"],
@@ -17,14 +16,12 @@ const EmployeeSchema = Schema(
 
     },
 
-    // --- Company Info ---
     company: {
       type: Schema.Types.ObjectId,
       ref: "Company",
       required: [true, "Please provide the company"],
     },
 
-    // --- Identification ---
     rfidNumber: {
       type: String,
 
@@ -34,8 +31,6 @@ const EmployeeSchema = Schema(
       type: String,
 
     },
-
-    // --- Job Details ---
     department: {
       type: String,
 
@@ -53,7 +48,6 @@ const EmployeeSchema = Schema(
     
     },
 
-    // --- Personal Info ---
     fatherName: {
       type: String,
   
@@ -63,7 +57,6 @@ const EmployeeSchema = Schema(
   
     },
 
-    // --- Contact Info ---
     employeePhone: {
       type: String,
       required: [true, "Please provide the employee phone number"],
@@ -81,7 +74,6 @@ const EmployeeSchema = Schema(
       required: [true, "Please provide the city"],
     },
 
-    // --- Emergency Contact ---
     emergencyContactName: {
       type: String,
 
@@ -95,13 +87,17 @@ const EmployeeSchema = Schema(
 
     },
 
-    // --- Social Profiles ---
     facebookProfile: {
       type: String,
     },
     linkedinProfile: {
       type: String,
     },
+    status: {
+  type: String,
+  enum: ["Active", "Inactive", "Resigned"],
+  default: "Active"
+}
   },
   { timestamps: true }
 );

@@ -10,36 +10,54 @@ export async function getAllProjects(req, res) {
   }
 }
 
-// Get projects by projectManager
-export async function getProjectsByManager(req, res) {
-  const projectManager = req.params.projectManager;
+// Get projects by company
+export async function getProjectsByCompany(req, res) {
+  const company = req.params.company;
   try {
-    const result = await Project.find({ projectManager });
+    const result = await Project.find({ company });
     res.status(200).json(result);
   } catch (err) {
     res.status(500).send({ error: err.message });
   }
 }
 
+// Get paginated projects
 export async function getPaginatedProjects(req, res) {
   try {
-    const page = parseInt(req.query.page) || 1;
-    const limit = parseInt(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
+    const { page = 1, limit = 10, search = "", company = "" } = req.query;
+    const skip = (parseInt(page) - 1) * parseInt(limit);
 
-    const [result, totalProjects] = await Promise.all([
-      Project.find().skip(skip).limit(limit).exec(),
-      Project.countDocuments(),
+    let query = {};
+
+    // Search by Project Name / Code
+    if (search) {
+      query.$or = [
+        { projectName: { $regex: search, $options: "i" } },
+        { projectCode: { $regex: search, $options: "i" } },
+      ];
+    }
+
+    // Filter by Company
+    if (company && company !== "all") {
+      query.company = company;
+    }
+
+    const [result, totalItems] = await Promise.all([
+      Project.find(query)
+        .populate("company")
+        .populate("client")
+        .populate("projectManager")
+        .sort({ createdAt: -1 })
+        .skip(skip)
+        .limit(parseInt(limit)),
+      Project.countDocuments(query),
     ]);
-
-    const totalPages = Math.ceil(totalProjects / limit);
 
     res.status(200).json({
       data: result,
-      currentPage: page,
-      totalPages: totalPages,
-      totalItems: totalProjects,
-      pageSize: limit,
+      totalPages: Math.ceil(totalItems / limit),
+      totalItems,
+      currentPage: parseInt(page),
     });
   } catch (err) {
     res.status(500).send({ error: err.message });
@@ -50,7 +68,12 @@ export async function getPaginatedProjects(req, res) {
 export async function getProjectById(req, res) {
   const id = req.params.id;
   try {
-    const result = await Project.findById(id);
+    const result = await Project.findById(id)
+      .populate("company")
+      .populate("client")
+      .populate("projectManager")
+      .populate("assignedEmployees");
+
     if (result) {
       res.status(200).json(result);
     } else {
@@ -77,7 +100,9 @@ export async function updateProject(req, res) {
   const id = req.params.id;
   const projectData = req.body;
   try {
-    const result = await Project.findByIdAndUpdate(id, projectData, { new: true });
+    const result = await Project.findByIdAndUpdate(id, projectData, {
+      new: true,
+    });
     if (result) {
       res.status(200).json(result);
     } else {
