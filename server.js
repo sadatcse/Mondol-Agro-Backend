@@ -43,6 +43,7 @@ app.use(
 const allowedOrigins = [
   "http://localhost:3000",
   "http://localhost:3001",
+  "https://mondol-agro-frontend.vercel.app",
 ];
 
 app.use(
