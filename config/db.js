@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import colors from "colors";
 
-const RECONNECT_TIME = 5 * 60 * 1000; // 5 minutes
+const RECONNECT_TIME = 1 * 30 * 1000; // 5 minutes
 
 const connectDB = async () => {
   try {
@@ -19,7 +19,7 @@ const connectDB = async () => {
     console.error(`Error: ${error.message}`.red.bold);
 
     console.log(
-      `Reconnecting to MongoDB in 5 minutes...`.yellow
+      `Reconnecting to MongoDB in 1 minutes...`.yellow
     );
 
     setTimeout(connectDB, RECONNECT_TIME);
@@ -29,7 +29,7 @@ const connectDB = async () => {
 /* Handle runtime disconnection */
 mongoose.connection.on("disconnected", () => {
   console.log("MongoDB disconnected!".red.bold);
-  console.log("Trying to reconnect in 5 minutes...".yellow);
+  console.log("Trying to reconnect in 1 minutes...".yellow);
 
   setTimeout(connectDB, RECONNECT_TIME);
 });

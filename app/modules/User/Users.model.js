@@ -16,13 +16,8 @@ const UserSchema = Schema(
       type: String,
       required: [true, "Please provide a password"],
     },
-    photo: {
-      type: String,
-    },
-    name: {
-      type: String,
-      required: [true, "Please provide a name"],
-    },
+
+
     role: {
       type: String,
       enum: ["admin", "user", "manager"], // Adjust roles as per your needs

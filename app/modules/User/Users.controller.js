@@ -1,7 +1,7 @@
 import User from "./Users.model.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
-
+import Employee from "../Employee/Employee.model.js";
 // Get all users with pagination and search
 export async function getAllUsers(req, res) {
   try {
@@ -85,27 +85,50 @@ export async function loginUser(req, res) {
   const { email, password } = req.body;
 
   try {
+    // 1. Find the User
     const user = await User.findOne({ email });
     if (!user) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
     if (user.status === "inactive") {
-      return res.status(403).json({ message: "Account is inactive. Please contact support." });
+      return res.status(403).json({ message: "Account is inactive." });
     }
 
+    // 2. Validate Password
     const isMatch = await user.comparePassword(password);
     if (!isMatch) {
       return res.status(401).json({ message: "Invalid email or password" });
     }
 
-    const token = jwt.sign({ id: user._id, role: user.role }, "secretKey", { expiresIn: "24h" });
+    // 3. Fetch Employee details (Name and Photo)
+    // We link them via the email address
+    const employee = await Employee.findOne({ 
+  employeeEmail: email.toLowerCase().trim() 
+}).select("name employeePhoto");
+      console.log(employee)
 
-    // Remove password field from user object before sending response
+    // 4. Generate Token
+    const token = jwt.sign(
+      { id: user._id, role: user.role }, 
+      "secretKey", 
+      { expiresIn: "24h" }
+    );
+
+    // 5. Format Response
     const userResponse = user.toObject();
     delete userResponse.password;
 
-    res.status(200).json({ message: "Login successful", user: userResponse, token });
+    res.status(200).json({
+      message: "Login successful",
+      token,
+      user: {
+        ...userResponse,
+        name: employee?.name || "N/A",
+        photo: employee?.employeePhoto || null,
+      }
+    });
+
   } catch (err) {
     res.status(500).send({ error: err.message });
   }

@@ -15,6 +15,9 @@ import DesignationRoutes from "../app/modules/Designation/Designation.routes.js"
 import LeaveRoutes from "../app/modules/Leave/Leave.routes.js";
 import SalaryComponentRoutes from "../app/modules/SalaryComponent/SalaryComponent.routes.js";
 import { getImageUrl } from "../config/space.js";
+import AttendanceRoutes from "../app/modules/Attendance/Attendance.routes.js";
+import EmployeeLeaveRoutes from "../app/modules/EmployeeLeave/EmployeeLeave.routes.js";
+import TimesheetRoutes from "../app/modules/Timesheet/Timesheet.routes.js";
 
 const routes = Router();
 
@@ -32,5 +35,8 @@ routes.use("/designation", DesignationRoutes);
 routes.use("/leave", LeaveRoutes);
 routes.use("/salary-component", SalaryComponentRoutes);
 routes.use("/transaction-logs", TransactionLogRoutes);
+routes.use("/attendance", AttendanceRoutes);
+routes.use("/employee-leave", EmployeeLeaveRoutes);
+routes.use("/timesheet", TimesheetRoutes);
 
 export default routes;

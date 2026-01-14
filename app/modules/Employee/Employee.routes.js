@@ -6,6 +6,9 @@ import {
   updateEmployee,
   removeEmployee,
   getPaginatedEmployees,
+  getDirectoryEmployees,
+  getEmployeePublicDetails,
+  getEmployeeProfile,
   getEmployeesByCity,
 } from "./Employee.controller.js";
 
@@ -31,5 +34,11 @@ EmployeeRoutes.delete("/delete/:id", removeEmployee);
 
 // Get paginated employees
 EmployeeRoutes.get("/paginate", getPaginatedEmployees);
+
+EmployeeRoutes.get("/directory-list", getDirectoryEmployees);
+
+EmployeeRoutes.get("/view-details/:id", getEmployeePublicDetails);
+
+EmployeeRoutes.get("/my-profile",  getEmployeeProfile);
 
 export default EmployeeRoutes;

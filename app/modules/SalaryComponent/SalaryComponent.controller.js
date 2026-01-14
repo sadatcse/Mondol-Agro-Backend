@@ -1,30 +1,37 @@
-// app/modules/SalaryComponent/SalaryComponent.controller.js
-
 import SalaryComponent from "./SalaryComponent.model.js";
 
-// Get all salary components
+// Get all salary components (unpaginated for dropdowns)
 export async function getAllSalaryComponents(req, res) {
   try {
-    const result = await SalaryComponent.find();
+    const result = await SalaryComponent.find().sort({ name: 1 });
     res.status(200).json(result);
   } catch (err) {
     res.status(500).send({ error: err.message });
   }
 }
 
-// Get paginated salary components
+// Get paginated salary components with filters
 export async function getPaginatedSalaryComponents(req, res) {
   try {
-    const { page = 1, limit = 10, search = "" } = req.query;
+    const { page = 1, limit = 10, search = "", type, calculationType } = req.query;
     const skip = (parseInt(page) - 1) * parseInt(limit);
 
     let query = {};
 
+    // Global Search Logic
     if (search) {
       query.$or = [
         { name: { $regex: search, $options: "i" } },
         { code: { $regex: search, $options: "i" } },
       ];
+    }
+
+    // Direct Filtering Logic
+    if (type) {
+      query.type = type;
+    }
+    if (calculationType) {
+      query.calculationType = calculationType;
     }
 
     const [result, totalItems] = await Promise.all([
@@ -77,7 +84,11 @@ export async function updateSalaryComponent(req, res) {
   const id = req.params.id;
   const salaryComponentData = req.body;
   try {
-    const result = await SalaryComponent.findByIdAndUpdate(id, salaryComponentData, { new: true });
+    const result = await SalaryComponent.findByIdAndUpdate(
+      id,
+      salaryComponentData,
+      { new: true, runValidators: true }
+    );
     if (result) {
       res.status(200).json(result);
     } else {

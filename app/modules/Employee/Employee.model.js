@@ -61,10 +61,12 @@ const EmployeeSchema = Schema(
       type: String,
       required: [true, "Please provide the employee phone number"],
     },
-    employeeEmail: {
-      type: String,
-      required: [true, "Please provide the employee email"],
-    },
+ employeeEmail: {
+  type: String,
+  required: [true, "Please provide the employee email"],
+  lowercase: true, // Add this
+  trim: true       // Add this
+},
     employeeAddress: {
       type: String,
       required: [true, "Please provide the employee address"],
@@ -92,6 +94,24 @@ const EmployeeSchema = Schema(
     },
     linkedinProfile: {
       type: String,
+    },
+    bankInfo: {
+      bankName: {
+        type: String,
+        trim: true,
+      },
+      accountNumber: {
+        type: String,
+        trim: true,
+      },
+      branch: {
+        type: String,
+        trim: true,
+      },
+      routingNumber: { // Optional: Useful for automated payroll/BEFTN
+        type: String,
+        trim: true,
+      }
     },
     status: {
   type: String,
