@@ -200,6 +200,44 @@ export async function getAttendanceReport(req, res) {
   }
 }
 
+export async function getEmployeeAttendanceHistory(req, res) {
+  try {
+    const { employeeId } = req.params;
+    const { date } = req.query; // Format: YYYY-MM
+
+    if (!employeeId) {
+      return res.status(400).json({ message: "Employee ID is required" });
+    }
+
+    let query = { employee: employeeId };
+
+    // Filter by Month/Year if provided
+    if (date) {
+      const [year, month] = date.split("-");
+      const startDate = new Date(year, month - 1, 1);
+      const endDate = new Date(year, month, 0, 23, 59, 59);
+      query.date = { $gte: startDate, $lte: endDate };
+    }
+
+    const records = await Attendance.find(query)
+      .sort({ date: -1 }) // Newest first
+      .populate("employee", "name employeeId designation");
+
+    // Calculate quick stats for this specific month/query
+    const stats = {
+      present: records.filter(r => r.status === "Present").length,
+      late: records.filter(r => r.status === "Late").length,
+      absent: records.filter(r => r.status === "Absent").length,
+      halfDay: records.filter(r => r.status === "Half Day").length,
+      leave: records.filter(r => r.status === "On Leave").length,
+    };
+
+    res.status(200).json({ stats, records });
+  } catch (err) {
+    res.status(500).send({ error: err.message });
+  }
+}
+
 export async function getTodaysLeaveCount(req, res) {
   try {
     const today = new Date();

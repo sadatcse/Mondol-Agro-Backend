@@ -10,6 +10,7 @@ import {
   bulkCreateAttendance,
   getAttendanceReport,
   getPaginatedAttendances,
+  getEmployeeAttendanceHistory,
   getTodaysLeaveCount,
 } from "./Attendance.controller.js";
 
@@ -37,6 +38,8 @@ AttendanceRoutes.get("/paginate", getPaginatedAttendances);
 AttendanceRoutes.get("/todays-leaves", getTodaysLeaveCount);
 
 AttendanceRoutes.get("/report", getAttendanceReport);
+
+AttendanceRoutes.get("/my-history/:employeeId", getEmployeeAttendanceHistory);
 
 
 export default AttendanceRoutes;
