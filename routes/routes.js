@@ -18,7 +18,8 @@ import { getImageUrl } from "../config/space.js";
 import AttendanceRoutes from "../app/modules/Attendance/Attendance.routes.js";
 import EmployeeLeaveRoutes from "../app/modules/EmployeeLeave/EmployeeLeave.routes.js";
 import TimesheetRoutes from "../app/modules/Timesheet/Timesheet.routes.js";
-
+import rolepermissionRoutes from "../app/modules/RolePermission/rolePermission.routes.js";
+import permissionRoutes from "../app/modules/Permission/permission.routes.js";
 const routes = Router();
 
 routes.use(transactionLogger);
@@ -38,5 +39,6 @@ routes.use("/transaction-logs", TransactionLogRoutes);
 routes.use("/attendance", AttendanceRoutes);
 routes.use("/employee-leave", EmployeeLeaveRoutes);
 routes.use("/timesheet", TimesheetRoutes);
-
+routes.use('/role-permissions', rolepermissionRoutes);
+routes.use("/permissions", permissionRoutes);
 export default routes;

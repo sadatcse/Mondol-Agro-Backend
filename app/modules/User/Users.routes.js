@@ -2,9 +2,10 @@ import { Router } from "express";
 import {
   createUser,
   getAllUsers,
-
+changePasswordprofile,
   getUserById,
   removeUser,
+  getUserRoles,
   updateUser,
   loginUser,
   logoutUser,
@@ -25,6 +26,8 @@ UserRoutes.post("/logout", authenticateToken, logoutUser);
 // UserRoutes.delete("/delete/:id", authenticateToken, removeUser);
 UserRoutes.put("/update/:id", authenticateToken, updateUser);
 UserRoutes.put("/change-password", authenticateToken, changePassword);
+UserRoutes.get("/roles", getUserRoles);
+UserRoutes.put("/change-password-profile", authenticateToken, changePasswordprofile); 
 
 
 

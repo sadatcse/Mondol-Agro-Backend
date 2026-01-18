@@ -133,6 +133,68 @@ export async function loginUser(req, res) {
     res.status(500).send({ error: err.message });
   }
 }
+export async function getUserRoles(req, res) {
+  try {
+    const rolePath = User.schema.path("role");
+
+ 
+    if (!rolePath || !rolePath.enumValues || rolePath.enumValues.length === 0) {
+      return res.status(200).json([]);
+    }
+
+    res.status(200).json(rolePath.enumValues);
+  } catch (err) {
+    console.error("Error in getUserRoles:", err);
+    res.status(500).json({ message: "Failed to fetch roles" });
+  }
+}
+
+export async function changePasswordprofile(req, res) {
+
+  const userId = req.user?.id; 
+  const { oldPassword, newPassword } = req.body;
+
+  if (!userId) {
+    return res.status(401).json({ message: "Unauthorized: User not identified." });
+  }
+
+
+  if (!oldPassword || !newPassword) {
+    return res.status(400).json({ message: "Both current and new passwords are required." });
+  }
+
+  if (newPassword.length < 6) {
+    return res.status(400).json({ message: "New password must be at least 6 characters long." });
+  }
+
+  try {
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User account not found." });
+    }
+
+
+    const isMatch = await user.comparePassword(oldPassword);
+    if (!isMatch) {
+      return res.status(401).json({ message: "The current password provided is incorrect." });
+    }
+
+
+    if (oldPassword === newPassword) {
+        return res.status(400).json({ message: "New password cannot be the same as your current password." });
+    }
+
+   
+    user.password = newPassword;
+    await user.save();
+
+    res.status(200).json({ message: "Password updated successfully." });
+
+  } catch (err) {
+    console.error("Error in changePasswordprofile:", err);
+    res.status(500).json({ message: "Internal server error", error: err.message });
+  }
+}
 
 // Remove a user by ID
 export async function removeUser(req, res) {
