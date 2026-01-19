@@ -21,6 +21,8 @@ import TimesheetRoutes from "../app/modules/Timesheet/Timesheet.routes.js";
 import rolepermissionRoutes from "../app/modules/RolePermission/rolePermission.routes.js";
 import permissionRoutes from "../app/modules/Permission/permission.routes.js";
 import PaymentTypeRoutes from "../app/modules/PaymentType/PaymentType.routes.js";
+import ExpenseCategoryRoutes from "../app/modules/ExpenseCategory/ExpenseCategory.routes.js";
+import CashLedgerRoutes from "../app/modules/CashLedger/CashLedger.routes.js";
 
 const routes = Router();
 
@@ -44,5 +46,8 @@ routes.use("/timesheet", TimesheetRoutes);
 routes.use('/role-permissions', rolepermissionRoutes);
 routes.use("/permissions", permissionRoutes);
 routes.use("/payment-type", PaymentTypeRoutes);
+routes.use("/expense-category", ExpenseCategoryRoutes);
+routes.use("/cash-ledger", CashLedgerRoutes);
+
 
 export default routes;
