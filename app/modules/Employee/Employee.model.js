@@ -108,7 +108,7 @@ const EmployeeSchema = Schema(
         type: String,
         trim: true,
       },
-      routingNumber: { // Optional: Useful for automated payroll/BEFTN
+      routingNumber: { 
         type: String,
         trim: true,
       }

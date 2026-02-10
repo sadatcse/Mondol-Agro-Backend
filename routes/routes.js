@@ -23,6 +23,9 @@ import permissionRoutes from "../app/modules/Permission/permission.routes.js";
 import PaymentTypeRoutes from "../app/modules/PaymentType/PaymentType.routes.js";
 import ExpenseCategoryRoutes from "../app/modules/ExpenseCategory/ExpenseCategory.routes.js";
 import CashLedgerRoutes from "../app/modules/CashLedger/CashLedger.routes.js";
+import WarehouseRoutes from "../app/modules/Warehouse/Warehouse.routes.js";
+import EmployeeAdvanceRoutes from "../app/modules/EmployeeAdvance/EmployeeAdvance.routes.js";
+import EmployeeAdvanceRepaymentRoutes from "../app/modules/EmployeeAdvanceRepayment/EmployeeAdvanceRepayment.routes.js";
 
 const routes = Router();
 
@@ -48,6 +51,8 @@ routes.use("/permissions", permissionRoutes);
 routes.use("/payment-type", PaymentTypeRoutes);
 routes.use("/expense-category", ExpenseCategoryRoutes);
 routes.use("/cash-ledger", CashLedgerRoutes);
-
+routes.use("/warehouse", WarehouseRoutes);
+routes.use("/employee-advance", EmployeeAdvanceRoutes);
+routes.use("/employee-advance-repayment", EmployeeAdvanceRepaymentRoutes);
 
 export default routes;
